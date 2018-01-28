@@ -18,29 +18,32 @@ class Client {
     client.getToDocument('home.html');
 
   Future<PlayerStats> getPlayerStats() =>
-    this._getHeroData()
-      .then(this._makePlayerStatsFromMap);
+    _getHeroData()
+      .then(_makePlayerStats);
 
   Future<Quest> getQuest() =>
-    this._getHeroData()
-      .then(this._makeQuestFromMap);
+    _getHeroData()
+      .then(_makeQuestFromMap);
 
-  Future<Map> _getHeroData() => this.getHome()
-      .then((Document document) =>
-        this._extractJsonWithRegex(
-          document,
-          new RegExp(r'Hero\["infos"\] = (.*?);')
-        ).first);
+  Future<Map> _getHeroData() =>
+    getHome()
+      .then(_extractHtml)
+      .then(_extractHeroJson)
+      .then(_jsonToMap);
 
-  List<Map> _extractJsonWithRegex(Document document, RegExp expression) =>
-    expression
-      .allMatches(document.outerHtml)
+  String _extractHtml(Document document) =>
+    document.outerHtml;
+
+  String _extractHeroJson(String html) =>
+    (new RegExp(r'Hero\["infos"\] = (.*?);'))
+      .allMatches(html)
       .map((Match match) => match.group(1))
-      .map((String rawJson) =>
-        JSON.decode((new HtmlUnescape()).convert(rawJson)))
-      .toList();
+      .first;
 
-  PlayerStats _makePlayerStatsFromMap(Map data) =>
+  Map _jsonToMap(String json) =>
+      JSON.decode((new HtmlUnescape()).convert(json));
+
+  PlayerStats _makePlayerStats(Map data) =>
     new PlayerStats(
       id: data['id'],
       level: data['level'],
