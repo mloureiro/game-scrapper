@@ -7,6 +7,7 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
+import 'package:game/Game/Entity/Worker.dart';
 import 'package:game/Infrastructure/Client.dart' as Infrastructure;
 
 class Client {
@@ -17,6 +18,9 @@ class Client {
   Future<Document> getHome() =>
     client.getToDocument('home.html');
 
+  Future<Document> getWorkingPlace() =>
+    client.getToDocument('harem.html');
+
   Future<PlayerStats> getPlayerStats() =>
     _getHeroData()
       .then(_makePlayerStats);
@@ -24,6 +28,13 @@ class Client {
   Future<Quest> getQuest() =>
     _getHeroData()
       .then(_makeQuestFromMap);
+
+  Future<List<Worker>> getWorkers() =>
+    getWorkingPlace()
+      .then(_extractHtml)
+      .then(_extractWorkerList)
+      .then(_jsonListToMap)
+      .then(_mapListToWorker);
 
   Future<Map> _getHeroData() =>
     getHome()
@@ -35,13 +46,22 @@ class Client {
     document.outerHtml;
 
   String _extractHeroJson(String html) =>
-    (new RegExp(r'Hero\["infos"\] = (.*?);'))
+    new RegExp(r'Hero\["infos"\] = (.*?);')
       .allMatches(html)
       .map((Match match) => match.group(1))
       .first;
 
+  List<String> _extractWorkerList(String html) =>
+    new RegExp(r'new Girl\((.+?)\)')
+      .allMatches(html)
+      .map((Match match) => match.group(1))
+      .toList();
+
   Map _jsonToMap(String json) =>
-      JSON.decode((new HtmlUnescape()).convert(json));
+    JSON.decode((new HtmlUnescape()).convert(json));
+
+  List<Map> _jsonListToMap(List<String> json) =>
+    json.map(_jsonToMap).toList();
 
   PlayerStats _makePlayerStats(Map data) =>
     new PlayerStats(
@@ -66,6 +86,19 @@ class Client {
       currentStep: data['questing']['step'],
       currentQuest: data['questing']['id_quest'],
     );
+
+  List<Worker> _mapListToWorker(List<Map> list) =>
+    list.map((Map data) =>
+      new Worker(
+        id: int.parse(data['id_girl']),
+        name: data['Name'],
+        level: int.parse(data['level']),
+        grade: data['graded'],
+        salary: data['salary'],
+        periodToGetSalary: data['4500'],
+        remainingPeriodToGetSalary: data['pay_in'],
+      ))
+      .toList();
 }
 
 
