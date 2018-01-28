@@ -1,4 +1,6 @@
 class Energy {
   int current;
-  int max;
+  final int max;
+
+  Energy({ this.current, this.max}) {}
 }

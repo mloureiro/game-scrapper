@@ -41,28 +41,28 @@ class Client {
       .toList();
 
   PlayerStats _makePlayerStatsFromMap(Map data) =>
-    new PlayerStats()
-      ..id = data['id']
-      ..level = data['level']
-      ..name = data['Name']
-      ..fightingEnergy = (new Energy()
-        ..current = data['energy_fight']
-        ..max = data['energy_fight_max']
-      )
-      ..questEnergy = (new Energy()
-        ..current = data['energy_quest']
-        ..max = data['energy_quest_max']
-      )
-      ..currency = data['soft_currency']
-      ..specialCurrency = data['hard_currency']
-    ;
+    new PlayerStats(
+      id: data['id'],
+      level: data['level'],
+      name: data['Name'],
+      currency: data['soft_currency'],
+      specialCurrency: data['hard_currency'],
+      fightingEnergy: (new Energy(
+        current: data['energy_fight'],
+        max: data['energy_fight_max'],
+      )),
+      questEnergy: (new Energy(
+        current: data['energy_quest'],
+        max: data['energy_quest_max'],
+      )),
+    );
 
   Quest _makeQuestFromMap(Map data) =>
-    new Quest()
-      ..world = data['questing']['id_world']
-      ..currentStep = data['questing']['step']
-      ..currentQuest = data['questing']['id_quest']
-    ;
+    new Quest(
+      world: data['questing']['id_world'],
+      currentStep: data['questing']['step'],
+      currentQuest: data['questing']['id_quest'],
+    );
 }
 
 

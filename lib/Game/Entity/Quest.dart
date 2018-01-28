@@ -1,5 +1,11 @@
 class Quest {
-  int world;
-  int currentStep;
-  int currentQuest;
+  final int world;
+  final int currentStep;
+  final int currentQuest;
+
+  Quest({
+    this.world,
+    this.currentStep,
+    this.currentQuest,
+  }) {}
 }

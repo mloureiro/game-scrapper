@@ -6,9 +6,9 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 class Client {
-  String baseUri;
-  Map cookies;
-  Map headers;
+  final String baseUri;
+  final Map cookies;
+  final Map headers;
 
   Client({
     this.baseUri = '',
