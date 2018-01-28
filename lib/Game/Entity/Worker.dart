@@ -1,3 +1,5 @@
+import 'package:json_object/json_object.dart';
+
 class Worker {
   final int id;
   final String name;
@@ -16,4 +18,19 @@ class Worker {
     this.periodToGetSalary,
     this.remainingPeriodToGetSalary,
   }) {}
+
+  JsonObject toJson() =>
+    new JsonObject
+      .fromMap({
+        'id': id,
+        'name': name,
+        'level': level,
+        'grade': grade,
+        'salary': salary,
+        'periodToGetSalary': periodToGetSalary,
+        'remainingPeriodToGetSalary': remainingPeriodToGetSalary,
+      });
+
+  String toString() =>
+    toJson().toString();
 }

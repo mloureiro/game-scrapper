@@ -1,4 +1,5 @@
 import 'package:game/Game/Entity/Energy.dart';
+import 'package:json_object/json_object.dart';
 
 class PlayerStats {
   final int id;
@@ -18,4 +19,19 @@ class PlayerStats {
     this.currency,
     this.specialCurrency,
   }) {}
+
+  JsonObject toJson() =>
+    new JsonObject
+      .fromMap({
+        'id': id,
+        'name': name,
+        'level': level,
+        'fightingEnergy': fightingEnergy.toJson(),
+        'questEnergy': questEnergy.toJson(),
+        'currency': currency,
+        'specialCurrency': specialCurrency,
+      });
+
+  String toString() =>
+    toJson().toString();
 }

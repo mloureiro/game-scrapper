@@ -7,6 +7,7 @@ environment:
 
 dependencies:
   html_unescape: "^0.1.5"
+  json_object: ^1.0.19
 
 dev_dependencies:
   test: ^0.12.0
