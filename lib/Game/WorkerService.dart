@@ -6,7 +6,7 @@ import 'package:game/Game/Entity/Worker.dart';
 class WorkerService {
   final GameClient client;
 
-  WorkerService(this.client) {}
+  WorkerService(this.client);
 
   Future<List<Worker>> getWorkers() =>
     client.getPage('harem.html')

@@ -11,7 +11,7 @@ class Quest {
     this.boss,
     this.currentStep,
     this.currentQuest,
-  }) {}
+  });
 
   JsonObject toJson() =>
     new JsonObject

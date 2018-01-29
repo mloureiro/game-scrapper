@@ -9,7 +9,7 @@ import 'package:game/Infrastructure/Client.dart';
 class GameClient {
   final Client client;
 
-  GameClient(this.client) {}
+  GameClient(this.client);
 
   Future<Document> getPage(String path) =>
     client.getToDocument(path);

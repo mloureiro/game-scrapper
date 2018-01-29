@@ -17,7 +17,7 @@ class Worker {
     this.salary,
     this.periodToGetSalary,
     this.remainingPeriodToGetSalary,
-  }) {}
+  });
 
   JsonObject toJson() =>
     new JsonObject

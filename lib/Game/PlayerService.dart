@@ -8,7 +8,7 @@ import 'package:game/Game/Entity/Quest.dart';
 class PlayerService {
   final GameClient client;
 
-  PlayerService(this.client) {}
+  PlayerService(this.client);
 
   Future<PlayerStats> getPlayerStats() =>
     _getHeroData()

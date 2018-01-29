@@ -18,7 +18,7 @@ class PlayerStats {
     this.questEnergy,
     this.currency,
     this.specialCurrency,
-  }) {}
+  });
 
   JsonObject toJson() =>
     new JsonObject
