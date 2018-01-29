@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:html/dom.dart';
 import 'package:html_unescape/html_unescape.dart';
 
-import 'package:game/Infrastructure/Client.dart' as Infrastructure;
+import 'package:game/Infrastructure/Client.dart';
 
-class Client {
-  Infrastructure.Client client;
+class GameClient {
+  final Client client;
 
-  Client(this.client) {}
+  GameClient(this.client) {}
 
   Future<Document> getPage(String path) =>
     client.getToDocument(path);
@@ -33,5 +33,3 @@ class Client {
   List<Map> jsonListToMap(List<String> json) =>
     json.map(jsonToMap).toList();
 }
-
-

@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:game/Game/Client.dart';
+import 'package:game/Game/GameClient.dart';
 import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
 
 class PlayerService {
-  final Client client;
+  final GameClient client;
 
   PlayerService(this.client) {}
 

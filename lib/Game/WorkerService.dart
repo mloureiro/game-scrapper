@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:game/Game/Client.dart';
+import 'package:game/Game/GameClient.dart';
 import 'package:game/Game/Entity/Worker.dart';
 
 class WorkerService {
-  final Client client;
+  final GameClient client;
 
   WorkerService(this.client) {}
 
