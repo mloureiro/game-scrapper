@@ -36,6 +36,31 @@ class Client {
       .then(_jsonListToMap)
       .then(_mapListToWorker);
 
+  Future fightBoss(Quest quest) =>
+    _executeAction({
+      'class': 'Battle',
+      'action': 'fight',
+      'who[id_troll]': quest.boss,
+      'who[id_world]': quest.world,
+    });
+
+  Future collectSalary(Worker worker) =>
+    _executeAction({
+      'class': 'Girl',
+      'action': 'get_salary',
+      'who': worker.id,
+    });
+
+  Future<Map> _executeAction(Map data) =>
+    client.postToJson('ajax.php', data: data)
+      .then((Map json) {
+        if (!json['success']) {
+          throw new Exception('Request failed:\nAction: $data\nReply: $json');
+        }
+
+        return json;
+      });
+
   Future<Map> _getHeroData() =>
     getHome()
       .then(_extractHtml)
@@ -83,6 +108,7 @@ class Client {
   Quest _makeQuestFromMap(Map data) =>
     new Quest(
       world: data['questing']['id_world'],
+      boss: data['questing']['id_world'] - 1,
       currentStep: data['questing']['step'],
       currentQuest: data['questing']['id_quest'],
     );

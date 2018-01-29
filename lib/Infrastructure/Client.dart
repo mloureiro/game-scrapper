@@ -17,47 +17,47 @@ class Client {
   }) {}
 
   Future<Document> getToDocument(String path) {
-    Uri uri = this._setupUriFromPath(path);
-    return this._makeRequest(uri, 'get')
+    Uri uri = _setupUriFromPath(path);
+    return _makeRequest(uri, 'get')
       .then((HttpClientResponse res) =>
         res.asyncExpand((bytes) => new Stream.fromIterable(bytes)).toList())
       .then((bytes) => parse(bytes, sourceUrl: uri.toString()));
   }
 
-  Future<Map> postToJson(String path, { Map data: null }) =>
-    this._makeRequest(this._setupUriFromPath(path), 'post', data: data)
-    .then((HttpClientResponse response) =>
-      response.transform(UTF8.decoder).toList())
-    .then((List l) => JSON.decode(l.join()));
+  Future<Map> postToJson(String path, { Map data }) =>
+    _makeRequest(_setupUriFromPath(path), 'post', data: data)
+      .then((HttpClientResponse response) =>
+        response.transform(UTF8.decoder).toList())
+      .then((List l) => JSON.decode(l.join()));
 
   Uri _setupUriFromPath(String path) =>
-    Uri.parse('${this.baseUri}${path}');
+    Uri.parse('${baseUri}${path}');
 
   Future<HttpClientResponse> _makeRequest(
     Uri uri,
     String method,
-    { Map data }
+    { Map data: const {} }
   ) =>
     new HttpClient()
       .openUrl(method, uri)
       .then((HttpClientRequest request) =>
-        this._setupRequest(request, formData: data).close());
+        _setupRequest(request, formData: data).close());
 
   HttpClientRequest _setupRequest(HttpClientRequest request, { Map formData }) {
-    this.cookies.forEach((String key, String value) =>
+    cookies.forEach((String key, String value) =>
       request.cookies.add(new Cookie(key, value)));
 
-    this.headers.forEach((String key, String value) =>
+    headers.forEach((String key, String value) =>
       request.headers.add(key, value));
 
     if (formData != null) {
+      request.headers.contentType =
+        new ContentType('application', 'x-www-form-urlencoded', charset: 'utf-8');
       request.write(
         formData.keys
           .map((String key) => '$key=${formData[key]}')
           .join('&')
       );
-      request.headers.contentType =
-        new ContentType('application', 'x-www-form-urlencoded', charset: 'utf-8');
     }
 
     return request;
