@@ -14,5 +14,5 @@ class Energy {
     });
 
   String toString() =>
-    toJson.toString();
+    toJson().toString();
 }
