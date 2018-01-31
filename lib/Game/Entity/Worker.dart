@@ -19,6 +19,9 @@ class Worker {
     this.remainingPeriodToGetSalary,
   });
 
+  bool isWorking() =>
+    remainingPeriodToGetSalary <= 0;
+
   JsonObject toJson() =>
     new JsonObject
       .fromMap({
