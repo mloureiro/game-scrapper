@@ -1,4 +1,4 @@
-import 'package:json_object/json_object.dart';
+import 'package:json_object/json_object.dart' show JsonObject;
 
 class Quest {
   final int world;

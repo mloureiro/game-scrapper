@@ -1,9 +1,11 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
+import 'dart:async' show Future, Stream;
+import 'dart:io'
+  show HttpClient, HttpClientRequest, HttpClientResponse, ContentType, Cookie;
+import 'dart:convert' show JSON, UTF8;
 
-import 'package:html/dom.dart';
-import 'package:html/parser.dart';
+import 'package:html/dom.dart' show Document;
+import 'package:html/parser.dart' show parse;
+import 'package:game/Infrastructure/RequestConfig.dart';
 
 class Client {
   final String baseUri;

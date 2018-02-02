@@ -4,6 +4,7 @@ import 'package:game/Game/GameClient.dart';
 import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
+import 'package:game/Game/Response/FightResponse.dart';
 
 class PlayerService {
   final GameClient client;

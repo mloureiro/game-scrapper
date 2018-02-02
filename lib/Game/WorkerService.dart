@@ -1,7 +1,8 @@
-import 'dart:async';
+import 'dart:async' show Future;
 
 import 'package:game/Game/GameClient.dart';
 import 'package:game/Game/Entity/Worker.dart';
+import 'package:game/Game/Response/CollectSalaryResponse.dart';
 
 class WorkerService {
   final GameClient client;

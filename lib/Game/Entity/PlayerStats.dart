@@ -1,5 +1,5 @@
+import 'package:json_object/json_object.dart' show JsonObject;
 import 'package:game/Game/Entity/Energy.dart';
-import 'package:json_object/json_object.dart';
 
 class PlayerStats {
   final int id;
