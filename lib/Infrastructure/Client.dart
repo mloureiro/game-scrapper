@@ -18,6 +18,41 @@ class Client {
     this.headers: const {},
   }) {}
 
+  Future request(Config config) =>
+    new HttpClient().openUrl(config.method, config.uri)
+      .then((HttpClientRequest request) => _addHeaders(request, config))
+      .then((HttpClientRequest request) => _addCookies(request, config))
+      .then((HttpClientRequest request) => _addBody(request, config))
+      .then((HttpClientRequest request) => request.close())
+      .then((HttpClientResponse response) =>
+        config.hasResponse()
+          ? config.responseType.parse(response)
+          : response);
+
+  HttpClientRequest _addCookies(HttpClientRequest request, Config config) {
+    config.cookies.forEach((String key, String value) =>
+      request.cookies.add(new Cookie(key, value)));
+
+    return request;
+  }
+
+  HttpClientRequest _addHeaders(HttpClientRequest request, Config config) {
+    config.headers.forEach((String key, Object value) =>
+      request.headers.add(key, value));
+
+    return request;
+  }
+
+  HttpClientRequest _addBody(HttpClientRequest request, Config config) {
+    if (config.hasBody()) {
+      request.headers.contentType = config.body.getContentType();
+      request.contentLength = config.body.getBody().length;
+      request.write(config.body.getBody());
+    }
+
+    return request;
+  }
+
   Future<Document> getToDocument(String path) {
     Uri uri = _setupUriFromPath(path);
     return _makeRequest(uri, 'get')
