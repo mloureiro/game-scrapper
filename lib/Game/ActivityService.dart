@@ -11,7 +11,7 @@ class ActivityService {
   ActivityService(this._client);
 
   Future<List<Activity>> getAvailableActivities() =>
-    _client.getPage('activities.html?tab=missions')
+    _client.fetchPage('activities.html?tab=missions')
       .then(_client.extractHtml)
       .then((String html) =>
         new RegExp(r'data-d="(.*?)"')
@@ -22,7 +22,7 @@ class ActivityService {
       .then(_makeActivityList);
 
   Future startActivity(Activity activity) =>
-    _client.executeAction({
+    _client.performAction({
       'class': 'Missions',
       'action': 'start_mission',
       'id_mission': activity.categoryId,
@@ -30,7 +30,7 @@ class ActivityService {
     });
 
   Future<ActivityRewardCollectResponse> collectActivity(Activity activity) =>
-    _client.executeAction({
+    _client.performAction({
       'class': 'Missions',
       'action': 'claim_reward',
       'id_mission': activity.categoryId,
@@ -39,7 +39,7 @@ class ActivityService {
       .then(_makeActivityRewardCollectResponse);
 
   Future collectBonus() =>
-    _client.executeAction({
+    _client.performAction({
       'class': 'Missions',
       'action': 'give_gift',
     })

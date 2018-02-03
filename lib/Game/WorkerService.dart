@@ -10,18 +10,22 @@ class WorkerService {
   WorkerService(this.client);
 
   Future<List<Worker>> getWorkers() =>
-    client.getPage('harem.html')
+    client.fetchPage('harem.html')
       .then(client.extractHtml)
       .then(_extractWorkerList)
       .then(client.jsonListToMap)
       .then(_mapListToWorker);
 
-  Future collectSalary(Worker worker) =>
-    client.executeAction({
+  Future<CollectSalaryResponse> collectSalary(Worker worker) =>
+    client.performAction( {
       'class': 'Girl',
       'action': 'get_salary',
       'who': worker.id,
-    });
+    })
+      .then((Map response) => new CollectSalaryResponse(
+        salary: response['money'],
+        timeToNextSalary: response['time'],
+      ));
 
   List<String> _extractWorkerList(String html) =>
     new RegExp(r'new Girl\((.+?)\)')

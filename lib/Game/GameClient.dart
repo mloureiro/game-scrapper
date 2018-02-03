@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:game/Infrastructure/RequestConfig.dart';
 import 'package:html/dom.dart';
 import 'package:html_unescape/html_unescape.dart';
 
@@ -8,21 +10,52 @@ import 'package:game/Infrastructure/Client.dart';
 
 class GameClient {
   final Client client;
+  final String baseUri;
+  final String username;
+  final String password;
+  Cookie _authentication;
 
-  GameClient(this.client);
+  GameClient({
+    this.client,
+    this.username,
+    this.password,
+    this.baseUri,
+  });
 
-  Future<Document> getPage(String path) =>
-    client.getToDocument(path);
+  Future authenticate() =>
+    client.request(new Config(
+      method: RequestMethod.POST,
+      uri: _buildUri('phoenix-ajax.php'),
+      body: RequestBody.formData({
+        'module': 'Member',
+        'action': 'form_log_in',
+        'call': 'Member',
+        'login': username,
+        'password': password,
+        'stay_online': 1,
+      }),
+    ))
+      .then(_extractAuthentication)
+      .then(ResponseBody.json().parse)
+      .then((Map json) => _throwIfRequestFail(json));
 
-  Future<Map> executeAction(Map data) =>
-    client.postToJson('ajax.php', data: data)
-      .then((Map json) {
-        if (!json['success']) {
-          throw new Exception('Request failed:\nAction: $data\nReply: $json');
-        }
+  Future<Document> fetchPage(String path) =>
+    client.request(new Config(
+      method: RequestMethod.GET,
+      uri: _buildUri(path),
+      responseType: ResponseBody.document(),
+      cookies: { 'authentication': _authentication },
+    ));
 
-        return json;
-      });
+  Future<Map> performAction(Map data) =>
+    client.request(new Config(
+      method: RequestMethod.POST,
+      uri: _buildUri('ajax.php'),
+      body: RequestBody.formData(data),
+      responseType: ResponseBody.json(),
+      cookies: { 'authentication': _authentication },
+    ))
+      .then((Map json) => _throwIfRequestFail(json, data: data));
 
   String extractHtml(Document document) =>
     document.outerHtml;
@@ -32,4 +65,21 @@ class GameClient {
 
   List<Map> jsonListToMap(List<String> json) =>
     json.map(jsonToMap).toList();
+
+  Uri _buildUri(String path) =>
+    Uri.parse('${baseUri}${path}');
+
+  Map _throwIfRequestFail(Map json, { Map data }) =>
+    json['success']
+      ? json
+      : throw new Exception('Request failed #action: $data #reply: $json');
+
+  HttpClientResponse _extractAuthentication(HttpClientResponse response) {
+    _authentication = response.cookies.firstWhere(
+      (Cookie cookie) => cookie.name == 'stay_online',
+      orElse: () => null,
+    );
+
+    return response;
+  }
 }

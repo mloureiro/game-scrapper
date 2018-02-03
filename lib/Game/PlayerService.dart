@@ -7,9 +7,9 @@ import 'package:game/Game/Entity/Quest.dart';
 import 'package:game/Game/Response/FightResponse.dart';
 
 class PlayerService {
-  final GameClient client;
+  final GameClient _client;
 
-  PlayerService(this.client);
+  PlayerService(this._client);
 
   Future<PlayerStats> getPlayerStats() =>
     _getHeroData()
@@ -19,19 +19,21 @@ class PlayerService {
     _getHeroData()
       .then(_makeQuestFromMap);
 
-  Future fightBoss(Quest quest) =>
-    client.executeAction({
+  Future<FightResponse> fightBoss(Quest quest) =>
+    _client.performAction({
       'class': 'Battle',
       'action': 'fight',
       'who[id_troll]': quest.boss,
       'who[id_world]': quest.world,
-    });
+    })
+      .then((Map response) =>
+        new FightResponse(response['end']['drop']));
 
   Future<Map> _getHeroData() =>
-    client.getPage('home.html')
-      .then(client.extractHtml)
+    _client.fetchPage('home.html')
+      .then(_client.extractHtml)
       .then(_extractHeroJson)
-      .then(client.jsonToMap);
+      .then(_client.jsonToMap);
 
   String _extractHeroJson(String html) =>
     new RegExp(r'Hero\["infos"\] = (.*?);')
