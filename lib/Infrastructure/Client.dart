@@ -1,23 +1,10 @@
 import 'dart:async' show Future, Stream;
 import 'dart:io'
   show HttpClient, HttpClientRequest, HttpClientResponse, ContentType, Cookie;
-import 'dart:convert' show JSON, UTF8;
 
-import 'package:html/dom.dart' show Document;
-import 'package:html/parser.dart' show parse;
 import 'package:game/Infrastructure/RequestConfig.dart';
 
 class Client {
-  final String baseUri;
-  final Map cookies;
-  final Map headers;
-
-  Client({
-    this.baseUri = '',
-    this.cookies: const {},
-    this.headers: const {},
-  });
-
   Future request(Config config) =>
     new HttpClient().openUrl(config.method, config.uri)
       .then((HttpClientRequest request) => _addHeaders(request, config))
