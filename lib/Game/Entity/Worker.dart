@@ -20,6 +20,9 @@ class Worker {
   });
 
   bool isWorking() =>
+    remainingPeriodToGetSalary <= periodToGetSalary;
+
+  bool hasSalaryToCollect() =>
     remainingPeriodToGetSalary <= 0;
 
   JsonObject toJson() =>
