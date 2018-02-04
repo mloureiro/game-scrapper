@@ -1,5 +1,20 @@
-import 'package:game/game.dart' as game;
+import 'package:game/Game/Runner/Runner.dart' show Runner;
+import 'package:game/Game/Service/GameClient.dart' show GameClient;
+import 'package:game/Infrastructure/Client.dart' show Client;
+import 'package:game/Infrastructure/Config.dart' show Config;
+
+// @TODO use event based (check once trigger required events)
+// change energy, trigger check energy command again
 
 main(List<String> arguments) {
-  game.main();
+  Config credentials = new Config('.credentials.json');
+
+  GameClient game = new GameClient(
+    client: new Client(),
+    username: credentials.get('username'),
+    password: credentials.get('password'),
+    baseUri: credentials.get('baseUri'),
+  );
+
+  new Runner(game).run();
 }
