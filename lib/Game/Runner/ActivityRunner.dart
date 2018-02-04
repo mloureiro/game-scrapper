@@ -23,15 +23,16 @@ class ActivityRunner {
   }
 
   Future _startActivity(List<Activity> list) async {
-    if (list.isNotEmpty && !_hasRunningActivity(list)) {
-      return _activityService.startActivity(_getNextActivity(list));
+    Activity next = _getNextActivity(list);
+    if (next != null && !_hasRunningActivity(list)) {
+      return _activityService.startActivity(next);
     }
   }
 
   Future _collectActivities(List<Activity> list) async {
     return Future.wait(
       list.where((activity) => activity.isFinished())
-        .map((activity) => _activityService.startActivity(activity)));
+        .map((activity) => _activityService.collectActivity(activity)));
   }
 
   Future _collectBonus() async =>
@@ -45,7 +46,9 @@ class ActivityRunner {
   Activity _getNextActivity(List<Activity> list) {
     list.sort(Activity.sortByDuration);
 
-    return list.first;
+    return list.firstWhere(
+      (activity) => activity.isReadyToStart(),
+      orElse: () => null);
   }
 
   bool _hasRunningActivity(List<Activity> list) =>

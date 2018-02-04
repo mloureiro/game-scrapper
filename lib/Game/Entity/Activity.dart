@@ -18,6 +18,9 @@ class Activity {
     this.remainingDuration,
   });
 
+  bool isReadyToStart() =>
+    remainingDuration == duration;
+
   bool isExecuting() =>
     remainingDuration > 0 && remainingDuration < duration;
 
