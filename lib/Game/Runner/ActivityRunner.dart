@@ -15,7 +15,9 @@ class ActivityRunner {
     List<Activity> list = await _activityService.getAvailableActivities();
 
     if (list.isEmpty) {
-      return _collectBonus();
+      return _collectBonus()
+        // @TODO be smarter with bonus
+        .catchError((error) => null);
     }
 
     await _startActivity(list);
