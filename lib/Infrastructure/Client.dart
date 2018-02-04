@@ -16,7 +16,7 @@ class Client {
     this.baseUri = '',
     this.cookies: const {},
     this.headers: const {},
-  }) {}
+  });
 
   Future request(Config config) =>
     new HttpClient().openUrl(config.method, config.uri)
