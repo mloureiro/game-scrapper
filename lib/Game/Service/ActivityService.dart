@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:game/Game/Entity/Activity.dart';
-import 'package:game/Game/GameClient.dart';
+import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Game/Response/ActivityBonusCollectResponse.dart';
 import 'package:game/Game/Response/ActivityRewardCollectResponse.dart';
 
