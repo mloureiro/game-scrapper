@@ -1,5 +1,7 @@
 analyzer:
   strong-mode: true
+#  errors:
+#    argument_type_not_assignable: ignore
 #   exclude:
 #     - path/to/excluded/files/**
 
