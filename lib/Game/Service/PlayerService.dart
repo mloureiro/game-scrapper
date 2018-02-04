@@ -5,29 +5,50 @@ import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
 import 'package:game/Game/Response/FightResponse.dart';
+import 'package:game/Infrastructure/Log.dart';
 
 class PlayerService {
+  static const _ACTION_FETCH_STATS = 'player.get_stats';
+  static const _ACTION_FETCH_QUEST_CURRENT = 'quest.get_current';
+  static const _ACTION_FIGHT = 'player.fight_boss';
+
   final GameClient _client;
 
   PlayerService(this._client);
 
   Future<PlayerStats> getPlayerStats() =>
-    _getHeroData()
-      .then(_makePlayerStats);
+    _log('fetch', _ACTION_FETCH_STATS, Log.debug)
+      .then((a) => _getHeroData())
+      .then((map) => _log('done', _ACTION_FETCH_STATS, Log.debug, result: map))
+      .then(_makePlayerStats)
+      .then((stats) =>
+        _log('current stats: $stats', _ACTION_FETCH_STATS, Log.info, result: stats));
 
   Future<Quest> getQuest() =>
-    _getHeroData()
-      .then(_makeQuestFromMap);
+    _log('fetch', _ACTION_FETCH_QUEST_CURRENT, Log.debug)
+      .then((a) => _getHeroData())
+      .then((map) =>
+        _log('done', _ACTION_FETCH_QUEST_CURRENT, Log.debug, result: map))
+      .then(_makeQuestFromMap)
+      .then((quest) =>
+        _log('current quest: $quest', _ACTION_FETCH_QUEST_CURRENT, Log.info, result: quest));
 
   Future<FightResponse> fightBoss(Quest quest) =>
-    _client.performAction({
-      'class': 'Battle',
-      'action': 'fight',
-      'who[id_troll]': quest.boss,
-      'who[id_world]': quest.world,
-    })
+    _log('fetch', _ACTION_FIGHT, Log.debug)
+      .then((a) => _client.performAction({
+        'class': 'Battle',
+        'action': 'fight',
+        'who[id_troll]': quest.boss,
+        'who[id_world]': quest.world,
+      }))
+      .then((map) => _log('done', _ACTION_FIGHT, Log.debug, result: map))
       .then((Map response) =>
-        new FightResponse(response['end']['drop']));
+        new FightResponse(response['end']['drop']))
+      .then((FightResponse response) => _log(
+        'Fight result: ${response.drop != null ? 'victory' : 'loss'} - Reward: ${response.drop}',
+        _ACTION_FIGHT,
+        Log.info,
+        result: response));
 
   Future<Map> _getHeroData() =>
     _client.fetchPage('home.html')
@@ -65,4 +86,15 @@ class PlayerService {
       currentStep: data['questing']['step'],
       currentQuest: data['questing']['id_quest'],
     );
+
+  Future _log(
+    String message,
+    String action,
+    Function callable,
+    { error, result }
+    ) async {
+    callable(message, context: ['player', action], error: error);
+
+    return result;
+  }
 }
