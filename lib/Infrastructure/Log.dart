@@ -2,7 +2,7 @@ import 'package:logging/logging.dart'
   show Level, Logger, LogRecord;
 
 class Log {
-  static const _LOGGER_NAME = 'some-random-name';
+  static const _LOGGER_NAME = 'main-logger';
 
   static Logger _logger;
 
@@ -40,7 +40,7 @@ class Log {
     String message,
     { List<String> context, Object error }
   ) =>
-    _log(message, Level.FINE, context: context, error: error);
+    _log(message, new Level('DEBUG', 100), context: context, error: error);
 
   static void _log(
     String message,
@@ -59,9 +59,8 @@ class Log {
 
   static Logger _setupLogger() {
     Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((LogRecord rec) {
-      print('[${rec.level.name}] [${rec.time}]: ${rec.message}');
-    });
+    Logger.root.onRecord.listen((LogRecord record) =>
+      print('[${record.level.name}] [${record.time}]: ${record.message}'));
 
     return new Logger(_LOGGER_NAME);
   }
