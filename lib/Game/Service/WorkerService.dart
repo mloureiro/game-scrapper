@@ -6,8 +6,8 @@ import 'package:game/Game/Response/CollectSalaryResponse.dart';
 import 'package:game/Infrastructure/Log.dart';
 
 class WorkerService {
-  static const _ACTION_FETCH_WORKERS = 'worker.fetch_list';
-  static const _ACTION_COLLECT_SALARY = 'worker.collect_salary';
+  static const _ACTION_FETCH_WORKERS = 'fetch_list';
+  static const _ACTION_COLLECT_SALARY = 'collect_salary';
 
   final GameClient client;
 
@@ -71,7 +71,7 @@ class WorkerService {
     Function callable,
     { error, result }
     ) async {
-    callable(message, context: ['activity', action], error: error);
+    callable(message, context: ['worker', action], error: error);
 
     return result;
   }
