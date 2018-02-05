@@ -58,7 +58,7 @@ class Log {
   }
 
   static Logger _setupLogger() {
-    Logger.root.level = Level.ALL;
+    Logger.root.level = Level.INFO;
     Logger.root.onRecord.listen((LogRecord record) =>
       print('[${record.level.name}] [${record.time}]: ${record.message}'));
 
