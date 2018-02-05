@@ -18,7 +18,7 @@ class PlayerService {
 
   Future<PlayerStats> getPlayerStats() =>
     _log('fetch', _ACTION_FETCH_STATS, Log.debug)
-      .then((a) => _getHeroData())
+      .then((_) => _getHeroData())
       .then((map) => _log('done', _ACTION_FETCH_STATS, Log.debug, result: map))
       .then(_makePlayerStats)
       .then((stats) =>
@@ -26,7 +26,7 @@ class PlayerService {
 
   Future<Quest> getQuest() =>
     _log('fetch', _ACTION_FETCH_QUEST_CURRENT, Log.debug)
-      .then((a) => _getHeroData())
+      .then((_) => _getHeroData())
       .then((map) =>
         _log('done', _ACTION_FETCH_QUEST_CURRENT, Log.debug, result: map))
       .then(_makeQuestFromMap)
@@ -35,7 +35,7 @@ class PlayerService {
 
   Future<FightResponse> fightBoss(Quest quest) =>
     _log('fetch', _ACTION_FIGHT, Log.debug)
-      .then((a) => _client.performAction({
+      .then((_) => _client.performAction({
         'class': 'Battle',
         'action': 'fight',
         'who[id_troll]': quest.boss,

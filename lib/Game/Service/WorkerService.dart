@@ -15,7 +15,7 @@ class WorkerService {
 
   Future<List<Worker>> getWorkers() =>
     _log('fetch', _ACTION_FETCH_WORKERS, Log.debug)
-      .then((a) => client.fetchPage('harem.html'))
+      .then((_) => client.fetchPage('harem.html'))
       .then((result) =>
         _log('done', _ACTION_FETCH_WORKERS, Log.debug, result: result))
       .then(client.extractHtml)
@@ -29,7 +29,7 @@ class WorkerService {
 
   Future<CollectSalaryResponse> collectSalary(Worker worker) =>
     _log('fetch $worker', _ACTION_COLLECT_SALARY, Log.debug)
-      .then((a) => client.performAction({
+      .then((_) => client.performAction({
         'class': 'Girl',
         'action': 'get_salary',
         'who': worker.id,

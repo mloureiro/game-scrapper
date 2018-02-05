@@ -17,7 +17,7 @@ class ActivityService {
 
   Future<List<Activity>> getAvailableActivities() =>
     _log('fetch', _ACTION_FETCH, Log.debug)
-      .then((a) => _client.fetchPage('activities.html?tab=missions'))
+      .then((_) => _client.fetchPage('activities.html?tab=missions'))
       .then((document) =>
         _log('done', _ACTION_FETCH, Log.debug, result: document))
       .then(_client.extractHtml)
@@ -33,18 +33,18 @@ class ActivityService {
 
   Future startActivity(Activity activity) =>
     _log('execute $activity', _ACTION_START, Log.debug)
-      .then((a) => _client.performAction({
+      .then((_) => _client.performAction({
         'class': 'Missions',
         'action': 'start_mission',
         'id_mission': activity.categoryId,
         'id_member_mission': activity.id,
       }))
-      .then((a) => _log('done $activity', _ACTION_START, Log.debug))
-      .then((a) => _log('started $activity', _ACTION_START, Log.info));
+      .then((_) => _log('done $activity', _ACTION_START, Log.debug))
+      .then((_) => _log('started $activity', _ACTION_START, Log.info));
 
   Future<ActivityRewardCollectResponse> collectActivity(Activity activity) =>
     _log('execute $activity', _ACTION_COLLECT, Log.debug)
-      .then((a) => _client.performAction({
+      .then((_) => _client.performAction({
         'class': 'Missions',
         'action': 'claim_reward',
         'id_mission': activity.categoryId,
