@@ -8,6 +8,7 @@ import 'package:game/Infrastructure/Config.dart' show Config;
 
 main(List<String> arguments) {
   Config credentials = new Config('.credentials.json');
+  Config gameData = new Config('.gameData.json');
 
   GameClient game = new GameClient(
     client: new Client(),
@@ -16,5 +17,5 @@ main(List<String> arguments) {
     baseUri: credentials.get('baseUri'),
   );
 
-  new Runner(game).run();
+  new Runner(game, gameData).run();
 }

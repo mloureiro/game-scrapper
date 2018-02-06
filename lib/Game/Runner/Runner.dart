@@ -4,17 +4,19 @@ import 'package:game/Game/Runner/ActivityRunner.dart';
 import 'package:game/Game/Runner/PlayerRunner.dart';
 import 'package:game/Game/Runner/WorkerRunner.dart';
 import 'package:game/Game/Service/GameClient.dart';
+import 'package:game/Infrastructure/Config.dart';
 
 class Runner {
-  GameClient _client;
+  final GameClient _client;
+  final Config _gameConfig;
   ActivityRunner _activityRunner;
   PlayerRunner _playerRunner;
   WorkerRunner _workerRunner;
 
-  Runner(this._client) {
     _activityRunner = new ActivityRunner(_client);
     _playerRunner = new PlayerRunner(_client);
-    _workerRunner = new WorkerRunner(_client);
+  Runner(this._client, this._gameConfig) {
+    _workerRunner = new WorkerRunner(_client, _gameConfig);
   }
 
   Future run() async {
@@ -22,5 +24,7 @@ class Runner {
     await _activityRunner.run();
     await _playerRunner.run();
     await _workerRunner.run();
+
+    _gameConfig.store();
   }
 }
