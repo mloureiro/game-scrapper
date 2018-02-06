@@ -1,6 +1,6 @@
 import 'package:json_object/json_object.dart' show JsonObject;
 
-class ActivityRewardCollectResponse {
+class RewardCollectResponse {
   final int currency;
   final int specialCurrency;
   final int experience;
@@ -9,7 +9,7 @@ class ActivityRewardCollectResponse {
   final List<String> equipment;
   final List<String> skins;
 
-  ActivityRewardCollectResponse({
+  RewardCollectResponse({
     this.currency = 0,
     this.specialCurrency = 0,
     this.experience = 0,
