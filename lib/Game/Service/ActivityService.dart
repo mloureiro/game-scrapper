@@ -79,7 +79,8 @@ class ActivityService {
 
   ActivityRewardCollectResponse _makeActivityRewardCollectResponse(Map json) =>
     new ActivityRewardCollectResponse(
-      money: json['hero']['soft_currency'],
+      currency: json['hero']['soft_currency'],
+      specialCurrency: json['hero']['hard_currency'],
       experience: json['hero']['xp'],
       items: json['items'],
       workers: json['girls'],

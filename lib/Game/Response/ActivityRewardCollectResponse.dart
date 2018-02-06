@@ -1,7 +1,8 @@
 import 'package:json_object/json_object.dart' show JsonObject;
 
 class ActivityRewardCollectResponse {
-  final int money;
+  final int currency;
+  final int specialCurrency;
   final int experience;
   final List<String> items;
   final List<String> workers;
@@ -9,7 +10,8 @@ class ActivityRewardCollectResponse {
   final List<String> skins;
 
   ActivityRewardCollectResponse({
-    this.money = 0,
+    this.currency = 0,
+    this.specialCurrency = 0,
     this.experience = 0,
     this.items = const [],
     this.workers = const [],
@@ -19,7 +21,8 @@ class ActivityRewardCollectResponse {
 
   JsonObject toJson() =>
     new JsonObject.fromMap({
-      'money': money,
+      'currency': currency,
+      'specialCurrency': specialCurrency,
       'experience': experience,
       'items': items,
       'workers': workers,
