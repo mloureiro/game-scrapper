@@ -13,9 +13,9 @@ class Runner {
   PlayerRunner _playerRunner;
   WorkerRunner _workerRunner;
 
-    _activityRunner = new ActivityRunner(_client);
     _playerRunner = new PlayerRunner(_client);
   Runner(this._client, this._gameConfig) {
+    _activityRunner = new ActivityRunner(_client, _gameConfig);
     _workerRunner = new WorkerRunner(_client, _gameConfig);
   }
 
