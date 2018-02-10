@@ -12,6 +12,7 @@ class ActivityService {
   static const _ACTION_FETCH_REFRESH_TIME = 'fetch_refresh_time';
   static const _ACTION_START = 'start';
   static const _ACTION_COLLECT = 'collect';
+  static const _ACTION_COLLECT_BONUS = 'collect_bonus';
 
   final GameClient _client;
 
@@ -72,11 +73,16 @@ class ActivityService {
         _log('collected $reward', _ACTION_COLLECT, Log.info, result: reward));
 
   Future collectBonus() =>
-    _client.performAction({
-      'class': 'Missions',
-      'action': 'give_gift',
-    })
-      .then(_makeActivityBonusCollectResponse);
+    _log('execute', _ACTION_COLLECT_BONUS, Log.debug)
+      .then((_) => _client.performAction({
+        'class': 'Missions',
+        'action': 'give_gift',
+      }))
+      .then((result) =>
+        _log('done $result', _ACTION_COLLECT_BONUS, Log.debug, result: result))
+      .then(_makeActivityBonusCollectResponse)
+      .then((reward) =>
+        _log('collected $reward', _ACTION_COLLECT_BONUS, Log.info, result: reward));
 
   List<Activity> _makeActivityList(List<Map> list) =>
     list.map(_makeActivity).toList();
