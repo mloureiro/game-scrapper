@@ -20,12 +20,10 @@ class ActivityService {
       .then((_) => _client.fetchPage('activities.html?tab=missions'))
       .then((document) =>
         _log('done', _ACTION_FETCH, Log.debug, result: document))
-      .then(_client.extractHtml)
-      .then((String html) =>
-        new RegExp(r'data-d="(.*?)"')
-          .allMatches(html)
-          .map((Match match) => match.group(1))
-          .toList())
+      .then((Document document) =>
+        document.querySelectorAll('.mission_object[data-d]'))
+      .then((list) =>
+        list.map((Element element) => element.attributes['data-d']).toList())
       .then(_client.jsonListToMap)
       .then(_makeActivityList)
       .then((List<Activity> list) =>
