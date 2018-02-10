@@ -5,9 +5,11 @@ import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Game/Response/ActivityBonusCollectResponse.dart';
 import 'package:game/Game/Response/RewardCollectResponse.dart';
 import 'package:game/Infrastructure/Log.dart';
+import 'package:html/dom.dart';
 
 class ActivityService {
   static const _ACTION_FETCH = 'fetch_available';
+  static const _ACTION_FETCH_REFRESH_TIME = 'fetch_refresh_time';
   static const _ACTION_START = 'start';
   static const _ACTION_COLLECT = 'collect';
 
@@ -28,6 +30,21 @@ class ActivityService {
       .then(_makeActivityList)
       .then((List<Activity> list) =>
         _log('found $list', _ACTION_FETCH, Log.info, result: list));
+
+  Future<int> getTimeForRefreshInSeconts() =>
+    _log('fetch', _ACTION_FETCH_REFRESH_TIME, Log.debug)
+      .then((_) => _client.fetchPage('activities.html?tab=missions'))
+      .then((document) =>
+        _log('done', _ACTION_FETCH_REFRESH_TIME, Log.debug, result: document))
+      .then(_client.extractHtml)
+      .then((String html) =>
+        new RegExp(r'next_update\s?=\s?(\d+);')
+          .allMatches(html)
+          .map((Match match) => match.group(1))
+          .first)
+      .then(int.parse)
+      .then((int time) =>
+        _log('found $time', _ACTION_FETCH_REFRESH_TIME, Log.info, result: time));
 
   Future startActivity(Activity activity) =>
     _log('execute $activity', _ACTION_START, Log.debug)
