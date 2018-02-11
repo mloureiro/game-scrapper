@@ -4,6 +4,7 @@ import 'package:game/Game/Entity/Activity.dart';
 import 'package:game/Game/Service/ActivityService.dart';
 import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Infrastructure/Config.dart';
+import 'package:game/Infrastructure/Log.dart';
 
 class ActivityRunner {
   static const _CONFIG_KEY = 'activity.next_run';
@@ -51,6 +52,11 @@ class ActivityRunner {
   Future _collectBonus(List<Activity> list) async =>
     !_hasUnfinishedActivity(list)
       ? _activityService.collectBonus()
+          .catchError((error) =>
+            Log.alert(
+              'bonus collection error',
+              context: ['runner.activity'],
+              error: error))
       : null;
 
   Future _setNextTimeToRun(List<Activity> list) =>
