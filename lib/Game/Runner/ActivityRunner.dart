@@ -29,9 +29,11 @@ class ActivityRunner {
 
   _run() =>
     _activityService.getAvailableActivities()
-      .then((list) => _runCommand(list, _startActivity))
-      .then((list) => _runCommand(list, _collectActivities))
-      .then((list) => _runCommand(list, _collectBonus))
+      .then((list) => Future.wait([
+        _startActivity(list),
+        _collectActivities(list),
+        _collectBonus(list),
+      ]))
       .then(_setNextTimeToRun);
 
   Future _startActivity(List<Activity> list) async {
@@ -59,12 +61,6 @@ class ActivityRunner {
       .then((int timeInSeconds) async =>
         _gameConfig.set(_CONFIG_KEY,
           new DateTime.now().millisecondsSinceEpoch + (timeInSeconds * 1000)));
-
-  Future<List<Activity>> _runCommand(List<Activity> list, command) async {
-    await command(list);
-
-    return list;
-  }
 
   Activity _getRunningActivity(List<Activity> list) =>
     list.firstWhere(
