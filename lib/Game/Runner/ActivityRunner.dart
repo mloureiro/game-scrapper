@@ -47,14 +47,15 @@ class ActivityRunner {
         .map((activity) => _activityService.collectActivity(activity)));
 
   Future _collectBonus(List<Activity> list) async =>
-    _getNextActivity(list) == null
+    !_hasUnfinishedActivity(list)
       ? _activityService.collectBonus()
       : null;
 
   Future _setNextTimeToRun(List<Activity> list) =>
-    (!list.isEmpty
-      ? new Future.value(list.firstWhere((activity) => activity.isExecuting()).remainingDuration)
-      : _activityService.getTimeForRefreshInSeconts())
+    _activityService.getAvailableActivities()
+      .then((list) => !list.isEmpty
+        ? list.firstWhere((activity) => activity.isExecuting()).remainingDuration
+        : _activityService.getTimeForRefreshInSeconts())
       .then((int timeInSeconds) async =>
         _gameConfig.set(_CONFIG_KEY,
           new DateTime.now().millisecondsSinceEpoch + (timeInSeconds * 1000)));
@@ -80,4 +81,9 @@ class ActivityRunner {
 
   bool _hasRunningActivity(List<Activity> list) =>
     _getRunningActivity(list) != null;
+
+  bool _hasUnfinishedActivity(List<Activity> list) =>
+    list.where((activity) =>
+      activity.isExecuting() || activity.isReadyToStart())
+      .length != 0;
 }
