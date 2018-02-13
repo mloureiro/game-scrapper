@@ -47,7 +47,8 @@ class PlayerRunner {
 
   int _calculateNextMinimumEnergy(Energy energy) =>
     (_MIN_ENERGY_TO_RUN * energy.max).round()
-      + (new Random()).nextInt(((1 - _MIN_ENERGY_TO_RUN) * energy.max).round());
+      + (new Random()).nextInt(((1 - _MIN_ENERGY_TO_RUN) * energy.max).round())
+      - 2;
 
   bool _isTimeToFight() =>
     _gameConfig.get(_CONFIG_FIGHT_KEY) == null
