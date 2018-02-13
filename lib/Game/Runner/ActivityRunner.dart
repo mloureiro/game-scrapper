@@ -50,14 +50,10 @@ class ActivityRunner {
         .map((activity) => _activityService.collectActivity(activity)));
 
   Future _collectBonus(List<Activity> list) async =>
-    !_hasUnfinishedActivity(list)
-      ? _activityService.collectBonus()
-          .catchError((error) =>
-            Log.alert(
-              'bonus collection error',
-              context: ['runner.activity'],
-              error: error))
-      : null;
+    _activityService.isBonusActivityAvailable()
+      .then((bool isAvailable) => isAvailable
+        ? _activityService.collectBonus()
+        : null);
 
   Future _setNextTimeToRun(List<Activity> list) =>
     _activityService.getAvailableActivities()
@@ -83,9 +79,4 @@ class ActivityRunner {
 
   bool _hasRunningActivity(List<Activity> list) =>
     _getRunningActivity(list) != null;
-
-  bool _hasUnfinishedActivity(List<Activity> list) =>
-    list.where((activity) =>
-      activity.isExecuting() || activity.isReadyToStart())
-      .length != 0;
 }

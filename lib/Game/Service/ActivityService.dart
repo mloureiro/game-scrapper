@@ -13,6 +13,7 @@ class ActivityService {
   static const _ACTION_START = 'start';
   static const _ACTION_COLLECT = 'collect';
   static const _ACTION_COLLECT_BONUS = 'collect_bonus';
+  static const _ACTION_CHECK_BONUS_AVAILABILITY = 'check_bonus_availability';
 
   final GameClient _client;
 
@@ -20,7 +21,7 @@ class ActivityService {
 
   Future<List<Activity>> getAvailableActivities() =>
     _log('fetch', _ACTION_FETCH, Log.debug)
-      .then((_) => _client.fetchPage('activities.html?tab=missions'))
+      .then((_) => fetchActivitiesPage())
       .then((document) =>
         _log('done', _ACTION_FETCH, Log.debug, result: document))
       .then((Document document) =>
@@ -32,9 +33,30 @@ class ActivityService {
       .then((List<Activity> list) =>
         _log('found $list', _ACTION_FETCH, Log.info, result: list));
 
+  Future<bool> isBonusActivityAvailable() =>
+    _log('fetch', _ACTION_CHECK_BONUS_AVAILABILITY, Log.debug)
+      .then((_) => fetchActivitiesPage())
+      .then((document) =>
+        _log('done', _ACTION_CHECK_BONUS_AVAILABILITY, Log.debug, result: document))
+      .then(_client.extractHtml)
+      .then((String html) =>
+        new RegExp(r'mission_gift\s?=\s?(\d+);')
+          .allMatches(html)
+          .map((Match match) => match.group(1))
+          .first)
+      .then(int.parse)
+      .then((int value) => value != 1)
+      .then((bool isAvailable) =>
+        _log(
+          '${isAvailable ? 'is' : 'not'} available',
+          _ACTION_CHECK_BONUS_AVAILABILITY,
+          Log.info,
+          result: isAvailable
+        ));
+
   Future<int> getTimeForRefreshInSeconds() =>
     _log('fetch', _ACTION_FETCH_REFRESH_TIME, Log.debug)
-      .then((_) => _client.fetchPage('activities.html?tab=missions'))
+      .then((_) => fetchActivitiesPage())
       .then((document) =>
         _log('done', _ACTION_FETCH_REFRESH_TIME, Log.debug, result: document))
       .then(_client.extractHtml)
@@ -83,6 +105,9 @@ class ActivityService {
       .then(_makeActivityBonusCollectResponse)
       .then((reward) =>
         _log('collected $reward', _ACTION_COLLECT_BONUS, Log.info, result: reward));
+
+  Future<Document> fetchActivitiesPage() =>
+    _client.fetchPage('activities.html?tab=missions');
 
   List<Activity> _makeActivityList(List<Map> list) =>
     list.map(_makeActivity).toList();
