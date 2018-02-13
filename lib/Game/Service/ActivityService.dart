@@ -32,7 +32,7 @@ class ActivityService {
       .then((List<Activity> list) =>
         _log('found $list', _ACTION_FETCH, Log.info, result: list));
 
-  Future<int> getTimeForRefreshInSeconts() =>
+  Future<int> getTimeForRefreshInSeconds() =>
     _log('fetch', _ACTION_FETCH_REFRESH_TIME, Log.debug)
       .then((_) => _client.fetchPage('activities.html?tab=missions'))
       .then((document) =>

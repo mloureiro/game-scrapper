@@ -63,7 +63,7 @@ class ActivityRunner {
     _activityService.getAvailableActivities()
       .then((list) => !list.isEmpty
         ? list.firstWhere((activity) => activity.isExecuting()).remainingDuration
-        : _activityService.getTimeForRefreshInSeconts())
+        : _activityService.getTimeForRefreshInSeconds())
       .then((int timeInSeconds) async =>
         _gameConfig.set(_CONFIG_KEY,
           new DateTime.now().millisecondsSinceEpoch + (timeInSeconds * 1000)));
