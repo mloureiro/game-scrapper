@@ -1,6 +1,6 @@
-import 'dart:async' show Future, Stream;
+import 'dart:async' show Future;
 import 'dart:io'
-  show HttpClient, HttpClientRequest, HttpClientResponse, ContentType, Cookie;
+  show HttpClient, HttpClientRequest, HttpClientResponse, Cookie;
 
 import 'package:game/Infrastructure/RequestConfig.dart';
 
