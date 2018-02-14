@@ -4,7 +4,6 @@ import 'package:game/Game/Entity/Activity.dart';
 import 'package:game/Game/Service/ActivityService.dart';
 import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Infrastructure/Config.dart';
-import 'package:game/Infrastructure/Log.dart';
 
 class ActivityRunner {
   static const _CONFIG_KEY = 'activity.next_run';
@@ -51,9 +50,10 @@ class ActivityRunner {
 
   Future _collectBonus(List<Activity> list) async =>
     _activityService.isBonusActivityAvailable()
-      .then((bool isAvailable) => isAvailable
-        ? _activityService.collectBonus()
-        : null);
+      .then((bool isAvailable) =>
+        isAvailable && !_hasUnfinishedActivity(list)
+          ? _activityService.collectBonus()
+          : null);
 
   Future _setNextTimeToRun(List<Activity> list) =>
     _activityService.getAvailableActivities()
@@ -79,4 +79,10 @@ class ActivityRunner {
 
   bool _hasRunningActivity(List<Activity> list) =>
     _getRunningActivity(list) != null;
+
+
+  bool _hasUnfinishedActivity(List<Activity> list) =>
+    list.where((activity) =>
+    activity.isExecuting() || activity.isReadyToStart())
+      .length != 0;
 }
