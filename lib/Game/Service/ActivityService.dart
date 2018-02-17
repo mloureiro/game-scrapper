@@ -21,7 +21,7 @@ class ActivityService {
 
   Future<List<Activity>> getAvailableActivities() =>
     _log('fetch', _ACTION_FETCH, Log.debug)
-      .then((_) => fetchActivitiesPage())
+      .then((_) => _fetchActivitiesPage())
       .then((document) =>
         _log('done', _ACTION_FETCH, Log.debug, result: document))
       .then((Document document) =>
@@ -35,7 +35,7 @@ class ActivityService {
 
   Future<bool> isBonusActivityAvailable() =>
     _log('fetch', _ACTION_CHECK_BONUS_AVAILABILITY, Log.debug)
-      .then((_) => fetchActivitiesPage())
+      .then((_) => _fetchActivitiesPage())
       .then((document) =>
         _log('done', _ACTION_CHECK_BONUS_AVAILABILITY, Log.debug, result: document))
       .then(_client.extractHtml)
@@ -56,7 +56,7 @@ class ActivityService {
 
   Future<int> getTimeForRefreshInSeconds() =>
     _log('fetch', _ACTION_FETCH_REFRESH_TIME, Log.debug)
-      .then((_) => fetchActivitiesPage())
+      .then((_) => _fetchActivitiesPage())
       .then((document) =>
         _log('done', _ACTION_FETCH_REFRESH_TIME, Log.debug, result: document))
       .then(_client.extractHtml)
@@ -106,7 +106,7 @@ class ActivityService {
       .then((reward) =>
         _log('collected $reward', _ACTION_COLLECT_BONUS, Log.info, result: reward));
 
-  Future<Document> fetchActivitiesPage() =>
+  Future<Document> _fetchActivitiesPage() =>
     _client.fetchPage('activities.html?tab=missions');
 
   List<Activity> _makeActivityList(List<Map> list) =>
