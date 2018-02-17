@@ -41,10 +41,10 @@ class Config {
   });
 
   void addHeader(String name, Object value) =>
-    headers['name'] = value;
+    headers[name] = value;
 
   void addCookie(String name, Object value) =>
-    cookies['name'] = value;
+    cookies[name] = value;
 
   bool hasResponse() =>
     responseType != null;
