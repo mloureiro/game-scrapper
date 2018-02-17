@@ -18,5 +18,5 @@ main(List<String> arguments) {
     baseUri: credentials.get('baseUri'),
   );
 
-  new Runner(new AuthenticateClientProxy(game), gameData).run();
+  new Runner(new AuthenticateClientProxy(game, gameData), gameData).run();
 }

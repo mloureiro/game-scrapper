@@ -10,6 +10,8 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:game/Infrastructure/Client.dart';
 
 class GameClient implements GameClientInterface {
+  static const _AUTHENTICATION_COOKIE_NAME = 'stay_online';
+
   final Client client;
   final String baseUri;
   final String username;
@@ -22,6 +24,14 @@ class GameClient implements GameClientInterface {
     this.password,
     this.baseUri,
   });
+
+  String getAuthenticationKey() =>
+    _authentication != null
+      ? _authentication.value
+      : null;
+
+  void setAuthenticationKey(String key) =>
+    _authentication = new Cookie(_AUTHENTICATION_COOKIE_NAME, key);
 
   Future authenticate() =>
     client.request(new Config(
@@ -77,7 +87,7 @@ class GameClient implements GameClientInterface {
 
   HttpClientResponse _extractAuthentication(HttpClientResponse response) {
     _authentication = response.cookies.firstWhere(
-      (Cookie cookie) => cookie.name == 'stay_online',
+      (Cookie cookie) => cookie.name == _AUTHENTICATION_COOKIE_NAME,
       orElse: () => null,
     );
 
