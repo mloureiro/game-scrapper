@@ -1,4 +1,5 @@
 import 'package:game/Game/Runner/Runner.dart' show Runner;
+import 'package:game/Game/Service/AuthenticateClientProxy.dart';
 import 'package:game/Game/Service/GameClient.dart' show GameClient;
 import 'package:game/Infrastructure/Client.dart' show Client;
 import 'package:game/Infrastructure/Config.dart' show Config;
@@ -17,5 +18,5 @@ main(List<String> arguments) {
     baseUri: credentials.get('baseUri'),
   );
 
-  new Runner(game, gameData).run();
+  new Runner(new AuthenticateClientProxy(game), gameData).run();
 }

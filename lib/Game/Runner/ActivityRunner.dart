@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:game/Game/Entity/Activity.dart';
 import 'package:game/Game/Service/ActivityService.dart';
-import 'package:game/Game/Service/GameClient.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Infrastructure/Config.dart';
 
 class ActivityRunner {
@@ -11,7 +11,7 @@ class ActivityRunner {
   ActivityService _activityService;
   final Config _gameConfig;
 
-  ActivityRunner(GameClient client, this._gameConfig) {
+  ActivityRunner(GameClientInterface client, this._gameConfig) {
     _activityService = new ActivityService(client);
   }
 

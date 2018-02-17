@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
-import 'package:game/Game/Service/GameClient.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Game/Service/PlayerService.dart';
 import 'package:game/Infrastructure/Config.dart';
 
@@ -16,7 +16,7 @@ class PlayerRunner {
   PlayerService _playerService;
   final Config _gameConfig;
 
-  PlayerRunner(GameClient client, this._gameConfig) {
+  PlayerRunner(GameClientInterface client, this._gameConfig) {
     _playerService = new PlayerService(client);
   }
 

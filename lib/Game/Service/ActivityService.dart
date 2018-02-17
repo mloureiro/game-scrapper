@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:game/Game/Entity/Activity.dart';
-import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Game/Response/ActivityBonusCollectResponse.dart';
 import 'package:game/Game/Response/RewardCollectResponse.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Infrastructure/Log.dart';
 import 'package:html/dom.dart';
 
@@ -15,7 +15,7 @@ class ActivityService {
   static const _ACTION_COLLECT_BONUS = 'collect_bonus';
   static const _ACTION_CHECK_BONUS_AVAILABILITY = 'check_bonus_availability';
 
-  final GameClient _client;
+  final GameClientInterface _client;
 
   ActivityService(this._client);
 

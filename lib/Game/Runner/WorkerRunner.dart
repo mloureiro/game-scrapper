@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:game/Game/Entity/Worker.dart';
-import 'package:game/Game/Service/GameClient.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Game/Service/WorkerService.dart';
 import 'package:game/Infrastructure/Config.dart';
 
@@ -11,7 +11,7 @@ class WorkerRunner {
   final Config _gameConfig;
   WorkerService _workerService;
 
-  WorkerRunner(GameClient client, this._gameConfig) {
+  WorkerRunner(GameClientInterface client, this._gameConfig) {
     _workerService = new WorkerService(client);
   }
 

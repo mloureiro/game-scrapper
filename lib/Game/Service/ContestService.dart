@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:game/Game/Entity/Contest.dart';
 import 'package:game/Game/Response/RewardCollectResponse.dart';
-import 'package:game/Game/Service/GameClient.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Infrastructure/Log.dart';
 import 'package:html/dom.dart';
 
@@ -10,7 +10,7 @@ class ContestService {
   static const _ACTION_FETCH = 'fetch_available';
   static const _ACTION_COLLECT = 'collect';
 
-  final GameClient _client;
+  final GameClientInterface _client;
 
   ContestService(this._client);
 

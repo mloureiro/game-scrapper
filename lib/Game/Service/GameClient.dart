@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Infrastructure/RequestConfig.dart';
 import 'package:html/dom.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 import 'package:game/Infrastructure/Client.dart';
 
-class GameClient {
+class GameClient implements GameClientInterface {
   final Client client;
   final String baseUri;
   final String username;

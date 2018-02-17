@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:game/Game/Service/GameClient.dart';
 import 'package:game/Game/Entity/Energy.dart';
 import 'package:game/Game/Entity/PlayerStats.dart';
 import 'package:game/Game/Entity/Quest.dart';
 import 'package:game/Game/Response/FightResponse.dart';
+import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Infrastructure/Log.dart';
 
 class PlayerService {
@@ -12,7 +12,7 @@ class PlayerService {
   static const _ACTION_FETCH_QUEST_CURRENT = 'quest.get_current';
   static const _ACTION_FIGHT = 'player.fight_boss';
 
-  final GameClient _client;
+  final GameClientInterface _client;
 
   PlayerService(this._client);
 
