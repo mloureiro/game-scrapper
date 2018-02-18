@@ -21,7 +21,7 @@ class ShopRunner {
 
   Future run() async {
     if (!_isTimeToRun()) {
-      return;
+      return null;
     }
 
     List<Item> list = await _shopService.getItemsInShop();
@@ -34,7 +34,7 @@ class ShopRunner {
       .then(_sort)
       .then(_buyList);
 
-    _setTimerToNextRun();
+    return _setTimerToNextRun();
   }
 
   bool _isTimeToRun() =>
