@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:mirrors';
 
 import 'package:game/Game/Service/GameClientInterface.dart';
 import 'package:game/Game/Service/PlayerService.dart';
 import 'package:game/Infrastructure/Config.dart';
+import 'package:html/dom.dart';
 
 class AuthenticateClientProxy implements GameClientInterface {
   static const _CONFIG_AUTHENTICATION_KEY = 'authorization.key';
@@ -17,14 +17,32 @@ class AuthenticateClientProxy implements GameClientInterface {
     _playerService = new PlayerService(_client);
   }
 
-  noSuchMethod(Invocation invocation) =>
+  String getAuthenticationKey() =>
+    _client.getAuthenticationKey();
+
+  void setAuthenticationKey(String key) =>
+    _client.setAuthenticationKey(key);
+
+  Future authenticate() =>
     _ensureAuthenticated()
-      .then((_) =>
-        reflect(_client).invoke(
-          invocation.memberName,
-          invocation.positionalArguments,
-          invocation.namedArguments
-        ).reflectee);
+      .then((_) => _client.authenticate());
+
+  Future<Document> fetchPage(String path) =>
+    _ensureAuthenticated()
+      .then((_) => _client.fetchPage(path));
+
+  Future<Map> performAction(Map data) =>
+    _ensureAuthenticated()
+      .then((_) => _client.performAction(data));
+
+  String extractHtml(Document document) =>
+    _client.extractHtml(document);
+
+  Map jsonToMap(String json) =>
+    _client.jsonToMap(json);
+
+  List<Map> jsonListToMap(List<String> json) =>
+    _client.jsonListToMap(json);
 
   Future _ensureAuthenticated() async {
     if (_isAuthenticated) {
