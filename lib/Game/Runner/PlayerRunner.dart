@@ -9,8 +9,9 @@ import 'package:game/Game/Service/PlayerService.dart';
 import 'package:game/Infrastructure/Config.dart';
 
 class PlayerRunner {
-  static const _ENERGY_RECOVER_TIME_IN_SECONDS = 10 * 60;
+  static const _ENERGY_RECOVER_TIME_IN_SECONDS = 20 * 60;
   static const _MIN_ENERGY_TO_RUN = .75;
+  static const _REQUIRED_ENERGY_TO_FIGHT = 1;
   static const _CONFIG_FIGHT_KEY = 'player.fight.next_run';
 
   PlayerService _playerService;
@@ -33,7 +34,7 @@ class PlayerRunner {
           .then((_) => _setNextFightRun(data.stats.fightingEnergy)));
 
   Future _fight(Quest quest, PlayerStats stats) async =>
-    stats.fightingEnergy.current > 1
+    stats.fightingEnergy.current > _REQUIRED_ENERGY_TO_FIGHT
       ? _playerService.fightBoss(quest)
         .then((_) async => _fight(quest, await _playerService.getPlayerStats()))
       : null;
