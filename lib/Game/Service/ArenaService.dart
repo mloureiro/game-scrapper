@@ -8,6 +8,8 @@ import 'package:html/dom.dart';
 
 class ArenaService {
   static const _ACTION_FETCH_CHALLENGER = 'fetch_challenger';
+  static const _ACTION_FETCH_CHALLENGER_REFRESH_TIME =
+    'fetch_challenger_refresh_time';
   static const _ACTION_FIGHT = 'fight';
 
   final GameClientInterface _client;
@@ -26,6 +28,22 @@ class ArenaService {
       .then((FightDetails challenger) =>
         _log('found #$arenaId: $challenger',
           _ACTION_FETCH_CHALLENGER, Log.info, result: challenger));
+
+  Future<int> getChallengersRefreshTime() =>
+    _log('fetch', _ACTION_FETCH_CHALLENGER_REFRESH_TIME, Log.debug)
+      .then((_) => _fetchArenaPage())
+    .then((document) =>
+      _log('done', _ACTION_FETCH_CHALLENGER_REFRESH_TIME,
+        Log.debug, result: document))
+    .then(_client.extractHtml)
+    .then((String html) =>
+      new RegExp(r'dec_timer\(.*?(\d+).*?\)')
+        .allMatches(html)
+        .map((Match match) => match.group(1))
+        .first)
+    .then(int.parse)
+      .then((time) => _log('found timer: $time',
+        _ACTION_FETCH_CHALLENGER_REFRESH_TIME, Log.info, result: time));
 
   Future<FightResponse> fight(FightDetails details) =>
     _log('start $details', _ACTION_FIGHT, Log.debug)
@@ -69,6 +87,9 @@ class ArenaService {
 
   Future<Document> _fetchBattlePage(int arenaId) =>
     _client.fetchPage('battle.html?id_arena=$arenaId');
+
+  Future<Document> _fetchArenaPage() =>
+    _client.fetchPage('arena.html');
 
   Future _log(
     String message,

@@ -7,7 +7,6 @@ import 'package:game/Infrastructure/Log.dart';
 
 class ArenaRunner {
   static const _ARENAS_IDS = const [0, 1, 2];
-  static const _REFRESH_CHALLENGERS_TIME_IN_SECONDS = 30 * 60;
   static const _CONFIG_FIGHT_KEY = 'arena.fight.next_run';
 
   ArenaService _arenaService;
@@ -26,7 +25,7 @@ class ArenaRunner {
       await _fight(_ARENAS_IDS[i]);
     }
 
-    _setNextFightRun();
+    await _setNextFightRun();
   }
 
   Future<FightResponse> _fight(int id) =>
@@ -35,12 +34,12 @@ class ArenaRunner {
       .catchError((error) =>
         _log('arena fight #$id failed', 'fight', Log.warning, error: error));
 
-  void _setNextFightRun() =>
-    _gameConfig.set(
-      _CONFIG_FIGHT_KEY,
-      (_REFRESH_CHALLENGERS_TIME_IN_SECONDS * 1000)
-        + new DateTime.now().millisecondsSinceEpoch
-    );
+  Future _setNextFightRun() async =>
+    _arenaService.getChallengersRefreshTime()
+      .then((int timeInSeconds) =>
+        _gameConfig.set(
+          _CONFIG_FIGHT_KEY,
+          (timeInSeconds  * 1000) + new DateTime.now().millisecondsSinceEpoch));
 
   bool _isTimeToFight() =>
     _gameConfig.get(_CONFIG_FIGHT_KEY) == null
