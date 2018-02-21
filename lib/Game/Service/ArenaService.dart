@@ -37,7 +37,7 @@ class ArenaService {
         Log.debug, result: document))
     .then(_client.extractHtml)
     .then((String html) =>
-      new RegExp(r'dec_timer\(.*?(\d+).*?\)')
+      new RegExp(r'dec_timer\(.*?arena_refresh_counter.*?(\d+).*?\)')
         .allMatches(html)
         .map((Match match) => match.group(1))
         .first)

@@ -39,7 +39,7 @@ class ArenaRunner {
       .then((int timeInSeconds) =>
         _gameConfig.set(
           _CONFIG_FIGHT_KEY,
-          (timeInSeconds  * 1000) + new DateTime.now().millisecondsSinceEpoch));
+          ((timeInSeconds + 30) * 1000) + new DateTime.now().millisecondsSinceEpoch));
 
   bool _isTimeToFight() =>
     _gameConfig.get(_CONFIG_FIGHT_KEY) == null
