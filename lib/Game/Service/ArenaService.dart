@@ -8,6 +8,7 @@ import 'package:html/dom.dart';
 
 class ArenaService {
   static const _ACTION_FETCH_CHALLENGER = 'fetch_challenger';
+  static const _ACTION_FETCH_AVAILABLE_CHALLENGERs = 'fetch_available_challengers';
   static const _ACTION_FETCH_CHALLENGER_REFRESH_TIME =
     'fetch_challenger_refresh_time';
   static const _ACTION_FIGHT = 'fight';
@@ -15,6 +16,17 @@ class ArenaService {
   final GameClientInterface _client;
 
   ArenaService(this._client);
+
+  Future fetchAvailableChallengers() =>
+    _log('fetch', _ACTION_FETCH_AVAILABLE_CHALLENGERs, Log.debug)
+      .then((_) => _fetchArenaPage())
+      .then((document) =>
+        _log('done', _ACTION_FETCH_AVAILABLE_CHALLENGERs,
+          Log.debug, result: document))
+      .then(_extractAvailableChallengers)
+      .then((List<int> list) =>
+        _log('found $list',
+          _ACTION_FETCH_AVAILABLE_CHALLENGERs, Log.info, result: list));
 
   Future<FightDetails> fetchChallenger(int arenaId) =>
     _log('fetch #$arenaId', _ACTION_FETCH_CHALLENGER, Log.debug)
@@ -70,6 +82,18 @@ class ArenaService {
   String _extractFightDetails(String html) =>
     new RegExp(r'({.+id_arena.+})')
       .allMatches(html)
+      .map((Match match) => match.group(1))
+      .first;
+
+  List<int> _extractAvailableChallengers(Document document) =>
+    document.querySelectorAll('.one_opponent:not(.disabled)')
+      .map(_extractChallengerPositionIdFromElement)
+      .map(int.parse)
+      .toList();
+
+  String _extractChallengerPositionIdFromElement(Element element) =>
+    new RegExp(r'(\d+)')
+      .allMatches(element.attributes['href'])
       .map((Match match) => match.group(1))
       .first;
 

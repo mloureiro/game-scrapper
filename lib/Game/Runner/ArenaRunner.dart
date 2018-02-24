@@ -6,7 +6,6 @@ import 'package:game/Infrastructure/Config.dart';
 import 'package:game/Infrastructure/Log.dart';
 
 class ArenaRunner {
-  static const _ARENAS_IDS = const [0, 1, 2];
   static const _CONFIG_FIGHT_KEY = 'arena.fight.next_run';
 
   ArenaService _arenaService;
@@ -21,8 +20,9 @@ class ArenaRunner {
       return;
     }
 
-    for(int i = 0; i < _ARENAS_IDS.length; i++) {
-      await _fight(_ARENAS_IDS[i]);
+    List<int> ids = await _arenaService.fetchAvailableChallengers();
+    for(int i = 0; i < ids.length; i++) {
+      await _fight(ids[i]);
     }
 
     await _setNextFightRun();
