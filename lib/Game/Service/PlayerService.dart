@@ -60,7 +60,7 @@ class PlayerService {
       .then(_client.jsonToMap);
 
   String _extractHeroJson(String html) =>
-    new RegExp(r'Hero\["infos"\] = (.*?);')
+    new RegExp(r'Hero.infos = (.*?);')
       .allMatches(html)
       .map((Match match) => match.group(1))
       .first;
