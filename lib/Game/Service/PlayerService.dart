@@ -60,9 +60,9 @@ class PlayerService {
       .then(_client.jsonToMap);
 
   String _extractHeroJson(String html) =>
-    new RegExp(r'Hero.infos = (.*?);')
+    new RegExp(r'Hero(\.infos|\["infos"\]) = (.*?);')
       .allMatches(html)
-      .map((Match match) => match.group(1))
+      .map((Match match) => match.group(2))
       .first;
 
   PlayerStats _makePlayerStats(Map data) =>
