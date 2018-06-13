@@ -21,6 +21,7 @@ class WorkerService {
       .then(client.extractHtml)
       .then(_extractWorkerList)
       .then(client.jsonListToMap)
+      .then(_extractActiveWorkers)
       .then(_mapListToWorker)
       .then((list) => _log(
         'found: [${list.map((worker) => worker.id).join(', ')}]',
@@ -47,10 +48,13 @@ class WorkerService {
         result: salary));
 
   List<String> _extractWorkerList(String html) =>
-    new RegExp(r'new Girl\((.+?)\)')
+    new RegExp(r'girlsDataList\[.*?({.+?})')
       .allMatches(html)
       .map((Match match) => match.group(1))
       .toList();
+
+  List<Map> _extractActiveWorkers(List<Map> list) =>
+    list.where((Map worker) => worker['graded'] != 0);
 
   List<Worker> _mapListToWorker(List<Map> list) =>
     list.map((Map data) =>
@@ -60,7 +64,7 @@ class WorkerService {
         level: int.parse(data['level']),
         grade: data['graded'],
         salary: data['salary'],
-        periodToGetSalary: data['4500'],
+        periodToGetSalary: data['pay_time'],
         remainingPeriodToGetSalary: data['pay_in'],
       ))
       .toList();
