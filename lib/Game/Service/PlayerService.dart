@@ -44,8 +44,8 @@ class PlayerService {
       .then((map) => _log('done', _ACTION_FIGHT, Log.debug, result: map))
       .then((Map response) =>
         new FightResponse(
-          winner: response['end']['drops'] != null,
-          drop: response['end']['drops'],
+          winner: response['end']['winner'] == 1,
+          drop: response['end']['reward']['html'],
         ))
       .then((FightResponse response) => _log(
         'Fight result: ${response.winner ? 'victory' : 'loss'} - Reward: ${response.drop}',
