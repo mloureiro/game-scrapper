@@ -34,7 +34,7 @@ class PlayerRunner {
           .then((_) => _setNextFightRun(data.stats.fightingEnergy)));
 
   Future _fight(Quest quest, PlayerStats stats) async =>
-    stats.fightingEnergy.current > _REQUIRED_ENERGY_TO_FIGHT
+    stats.fightingEnergy.current >= _REQUIRED_ENERGY_TO_FIGHT
       ? _playerService.fightBoss(quest)
         .then((_) async => _fight(quest, await _playerService.getPlayerStats()))
       : null;
