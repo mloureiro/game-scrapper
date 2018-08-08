@@ -43,8 +43,8 @@ class ShopRunner {
 
   Future _setTimerToNextRun() =>
     _shopService.getTimeForRefreshInSeconds()
-      .then((timeInSeconds) => _gameConfig.set(_CONFIG_KEY,
-        new DateTime.now().millisecondsSinceEpoch + (timeInSeconds * 1000)));
+      .then((_) => _gameConfig.set(_CONFIG_KEY,
+        new DateTime.now().millisecondsSinceEpoch + (30 * 60 * 1000) + 3000));
 
   List<Item> _extractType(List<Item> list, String type) =>
     list.where((item) => item.type == type).toList();
