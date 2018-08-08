@@ -48,7 +48,7 @@ class WorkerService {
         result: salary));
 
   List<String> _extractWorkerList(String html) =>
-    new RegExp(r'girlsDataList\[.*?({.+?})')
+    new RegExp(r'girlsDataList\[.*?({.+?});')
       .allMatches(html)
       .map((Match match) => match.group(1))
       .toList();
