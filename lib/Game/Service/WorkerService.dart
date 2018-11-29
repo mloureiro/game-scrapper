@@ -33,7 +33,7 @@ class WorkerService {
       .then((_) => client.performAction({
         'class': 'Girl',
         'action': 'get_salary',
-        'who': worker.id,
+        'which': worker.id,
       }))
       .then((result) =>
         _log('done $worker', _ACTION_COLLECT_SALARY, Log.debug, result: result))
